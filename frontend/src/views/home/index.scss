@@ -16,12 +16,12 @@
             width: 50em;
             border-collapse: collapse;
             box-shadow: 0px 10px 20px rgba(255, 255, 255, 0.16);
-            // tr:nth-child(even) {
-                //     background-color: #f2f2f2;
-                // }
             }
             tr {
                 height: 50px;
+                &:hover{
+                    background-color: lighten($color: #5A6063, $amount: 3);
+                }
             }
             thead{
                 background-color: #5A6063;

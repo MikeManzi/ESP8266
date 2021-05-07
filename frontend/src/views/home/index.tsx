@@ -6,7 +6,8 @@ interface Transaction{
     customerId: String,
     initialBalance: Number,
     transportFare: Number,
-    newBalance: Number
+    newBalance: Number,
+    createdAt: Date
 }
 
 const url = 'http://localhost:5000'
@@ -17,6 +18,7 @@ function Index() {
         const socket = socketIOClient(url);
          socket.on("Transactions", (data) => {
          setTransactions(data);
+         console.log(data)
          });
         return () =>{
             socket.disconnect()
@@ -35,11 +37,23 @@ function Index() {
                         <th>Initial Balance</th>
                         <th>Transport Fare</th>
                         <th>New Balance</th>
+                        <th>Created at</th>
                     </tr>
                 </thead>
                 <tbody>
                     {transactions.map((transaction, index)=>{
-                        const {customerId, initialBalance, transportFare, newBalance} = transaction
+                        const {customerId, initialBalance, transportFare, newBalance, createdAt} = transaction
+                        let d = createdAt ? new Date(createdAt) : new Date(2021, 7, 5);
+                        let options: any = {
+                            year: "numeric",
+                            month: "numeric",
+                            day: "numeric",
+                            hour: "numeric",
+                            minute: "numeric",
+                            second: "numeric",
+                            hour12: true,
+                          };
+                          let formatedDate = new Intl.DateTimeFormat("en", options).format(d);
                         return(
                             <tr key={index}>
 
@@ -48,6 +62,7 @@ function Index() {
                                 <th>{initialBalance}</th>
                                 <th>{transportFare}</th>
                                 <th>{newBalance}</th>
+                                <th>{formatedDate}</th>
                             </tr>
                         )
                     })}
