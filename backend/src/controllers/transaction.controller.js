@@ -10,12 +10,12 @@ exports.createTransaction = async(req, res)=>{
     }
 }
 
-exports.getTransactions = async(req, res)=>{
+exports.getTransactions = async()=>{
     try{
         const transactions = await Transaction.find({})
-        res.send(transactions)
+        return {success:true, transactions}
     }catch(error){
-        res.status(500).send()
+        return {success:false}
     }
 }
 

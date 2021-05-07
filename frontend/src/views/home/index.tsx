@@ -1,16 +1,33 @@
 import React,{useState, useEffect} from 'react'
+import socketIOClient from 'socket.io-client'
 
-const url = 'http://localhost:5000/api/transactions'
+interface Transaction{
+    customerId: String,
+    initialBalance: Number,
+    transportFare: Number,
+    newBalance: Number
+}
+
+const url = 'http://localhost:5000'
 function Index() {
-    const [transactions, setTransactions] = useState([])
-    const getTransactions = async()=>{
-        const response = await fetch(url)
-        const transactions = await response.json()
-        setTransactions(transactions)
-    }
+    const [transactions, setTransactions] = useState<Array<Transaction>>([])
+    // const getTransactions = async()=>{
+    //     const response = await fetch(url)
+    //     const transactions = await response.json()
+    //     setTransactions(transactions)
+    // }
     useEffect(()=>{
-        getTransactions()
-    })
+
+        const socket = socketIOClient(url);
+         socket.on("Transactions", (data) => {
+         setTransactions(data);
+         });
+        return () =>{
+            socket.disconnect()
+        }
+        //  socket.disconnect();
+    },[])
+
     return (
         <>
           <h1>RFID transactions</h1>  
